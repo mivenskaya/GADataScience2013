@@ -13,14 +13,14 @@ data[,column]<-NULL
 #set the seed 
 set.seed(1)
 #pre-allocate a vector for minimum errors in each fold
-x <- vector(mode = "list", length = n)
+average.errors<-numeric()
 #get number of records
 nrecords<-nrow(data)
 #the length of each subset/fold will be number of records divided by number of folds
 len.of.subsets<-nrecords/n
 #we want to train on all but one of the subsets
 train.test.split <-len.of.subsets*(n-1)
-average.errors<-numeric()
+
 for (i in 1:n)
   {
   #take a train subset 
@@ -75,4 +75,4 @@ names(results)<-c('k', 'err.rate')
 results.plot<-ggplot(results, aes(x=k, y=err.rate))+geom_smooth()
 print(results.plot)
 }
-knn_nfold(3, 50, iris, 5)
+knn_nfold(3, 100, iris, 5)
