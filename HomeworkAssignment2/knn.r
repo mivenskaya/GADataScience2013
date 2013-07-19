@@ -1,17 +1,17 @@
 # defines a function knn_nfold, given n (number of folds), maxk (maximum k value), data, 
-#and the column of the label trained for.
+#and the column of the label trained for. returns the average error rate over all the folds. 
 
 knn_nfold<- function(n, maxk, dataset, column)
 {
 library(class)
+#set the seed 
+set.seed(1)
 data<-dataset
 #randomize the data
 data<-data[sample(nrow(data)),]
 #pull labels from data
 labels<-data[,column]
 data[,column]<-NULL
-#set the seed 
-set.seed(1)
 #pre-allocate a vector for minimum errors in each fold
 average.errors<-numeric()
 #get number of records
@@ -20,7 +20,7 @@ nrecords<-nrow(data)
 len.of.subsets<-nrecords/n
 #we want to train on all but one of the subsets
 train.test.split <-len.of.subsets*(n-1)
-
+#train on each subset
 for (i in 1:n)
   {
   #take a train subset 
@@ -67,6 +67,7 @@ for (i in 1:n)
   }
 print ('average error rates over all folds:')
 print (mean(average.errors, na.rm=TRUE))
+return (mean(average.errors, na.rm=TRUE))
 #create and print plot of error rates in relation to k
 library(ggplot2)
 results<-data.frame(1:maxk, err.rates)
@@ -74,5 +75,7 @@ results<-data.frame(1:maxk, err.rates)
 names(results)<-c('k', 'err.rate')
 results.plot<-ggplot(results, aes(x=k, y=err.rate))+geom_smooth()
 print(results.plot)
+
+
 }
 knn_nfold(3, 100, iris, 5)
